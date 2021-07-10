@@ -1,5 +1,6 @@
 ## build process
 <img src="imgs/build_process.png">
+
 ## Cross tool chain important binaries
 ### arm-none-eabi-gcc
 It's a compiler, linker and assembler.
