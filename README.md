@@ -134,7 +134,7 @@ ELF is a standard file format for object files and executable files when you use
   <li>
     SRECORD: introduced by Motorola.
   </li>
-<ul>
+</ul>
 
 main.o doesn't include any <strong>absolute addresses</strong> for data and code. If you disassembled the content using objdump tool, you'll find that every section starts at 0 address in memory, that's why it's called relocatable (they will be relocated later by the linker using the linker script).
 
