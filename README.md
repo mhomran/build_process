@@ -34,3 +34,8 @@ It's a format converter to change from executable format to another executable f
 ### arm-none-eabi-readelf
 ### arm-none-eabi-nm
 
+## Makefile
+### rule
+A rule appears in the makefile and says when and how to remake certain files, called the rule’s <i>targets</i> (most often only one per rule). It lists the other files that are the <i>prerequisites</i> of the target, and the <i>recipe</i> to use to create or update the target.
+
+
