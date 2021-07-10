@@ -40,6 +40,22 @@ It's an assembler.
 ### arm-none-eabi-objcopy
 It's a format converter to change from executable format to another executable format.
 ### arm-none-eabi-objdump
+To dump an object file e.g. main.o
+#### common flags:
+<ul>
+  <li>
+    <code>-h</code>(headers)display the contents of the section headers.
+  </li>
+  <li>
+    <code>-d</code>(disassemble)display the assembler contents of the executable sections.
+    ```
+    arm-none-eabi-objdump -d main.o > main_log
+    ```
+  </li>
+  <li>
+    <code>-s</code>(full-content)display the full contents of all sections requested. 
+  </li>
+</ul>
 ### arm-none-eabi-readelf
 ### arm-none-eabi-nm
 
@@ -101,4 +117,36 @@ A target pattern is composed of a ‘%’ between a prefix and a suffix, either 
 %.o: %.c
         $(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 ```
+
+### Analyzing .o filies (Relocatable object files)
+A file format standard describes a way of organizing various elements (data, read-only data, code, uninitialized data, etc.) of a program in different sections.
+#### ELF (executable and linkable format)
+ELF is a standard file format for object files and executable files when you use GCC.
+
+#### Other formats:
+<ul>
+  <li>
+    (Common Object File Format) COFF: introduced by Unix SystemV.
+  </li>
+  <li>
+    (Arm Image Format) AIF: introduced by ARM.
+  </li>
+  <li>
+    SRECORD: introduced by Motorola.
+  </li>
+<ul>
+
+main.o doesn't include any <strong>absolute addresses</strong> for data and code. If you disassembled the content using objdump tool, you'll find that every section starts at 0 address in memory, that's why it's called relocatable (they will be relocated later by the linker using the linker script).
+
+#### sections:
+##### .text
+It holds the code or the instructions of the program.
+##### .data
+It holds the initialized data.
+##### .bss
+It holds the uninitialized data.
+##### .rodata
+It holds the read-only data of the program.
+#### User defined sections
+You can add your own sections.
 
