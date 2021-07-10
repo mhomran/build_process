@@ -2,7 +2,7 @@
 ### arm-none-eabi-gcc
 It's a compiler, linker and assembler.
 
-<b>common flags:</b>
+#### common flags:
 <ul>
   <li>
     <code>-o</code> to specifiy the name of the output file. If it's not specified, the default name is a.out
