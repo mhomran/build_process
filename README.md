@@ -56,6 +56,7 @@ To dump an object file e.g. main.o
     <code>-s</code>(full-content)display the full contents of all sections requested. 
   </li>
 </ul>
+
 ### arm-none-eabi-readelf
 ### arm-none-eabi-nm
 
@@ -176,7 +177,7 @@ uint32 vector[] __attribute__((section (".isr_vector"))) =
 ```
 
 #### compiler attributes</a>
-<a style="text-decoration: none" href="https://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html">GCC reference </a>
+<a style="text-decoration: none" target="_blank" href="https://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html">GCC reference </a>
 The keyword ```__attribute__``` allows you to specify special properties of variables, function parameters, or structure, union, and, in C++, class members. This __attribute__ keyword is followed by an attribute specification enclosed in double parentheses. Some attributes are currently defined generically for variables. Other attributes are defined for variables on particular target systems. Other attributes are available for functions (see Function Attributes), labels (see Label Attributes), enumerators (see Enumerator Attributes), statements (see Statement Attributes), and for types (see Type Attributes). Other front ends might define more attributes (see Extensions to the C++ Language).
 
 ##### variable attributes
