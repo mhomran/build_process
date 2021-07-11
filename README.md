@@ -190,15 +190,17 @@ The keyword ```__attribute__``` allows you to specify special properties of vari
 <ul>
   <li>
     <code>Alias</code> It allows to give alias name for a function.
-    ```C
+    <br>
+    <code>
     void NMI_Handler(void) __attribute__((alias("Default_Handler")));
-    ```
+    </code>
   </li>
   <li>
     <code>weak</code> It allows to override already defined weak function(dummy), with the same function name.
-    ```C
+    <br>
+    <code>
     void NMI_Handler(void) __attribute__((weak, alias("Default_Handler")));
-    ```
+    </code>
   </li>
 </ul>
 
