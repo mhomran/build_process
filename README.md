@@ -264,13 +264,15 @@ To get the .data section from flash, you should know the boundaries of this sect
         Typically one linker script has one memory command.
       </li>
       <li>
-        syntax <br>
-        <code style="white-space: pre;">
-MEMORY 
-{
-  name(attr):ORIGIN=origin, LENGTH = len
-}
-        </code>
+        syntax 
+        <br>
+        <code>MEMORY</code>
+        <br>
+        <code>{</code>
+        <br>
+        <code>name(attr):ORIGIN=origin, LENGTH = len</code>
+        <br>
+        <code>}</code>
         <ul>
           <li>
             name: defines the name of the memory region which will be later referenced by other parts of the linker script. A name has its own optional attribute list <code>attr</code>
@@ -307,14 +309,17 @@ MEMORY
         </ul> 
       </li>
       <li>
-        example: <br>
-        <code style="white-space: pre">
-          MEMORY 
-          {
-            FLASH(rx):ORIGIN=0x08000000,LENGTH=1024K
-            SRAM(rwx):ORIGIN=0x20000000,LENGTH=128K
-          }
-        </code>
+        example:
+        <br>
+        <code>MEMORY</code>
+        <br>
+        <code>{</code>
+        <br>
+        <code>FLASH(rx):ORIGIN=0x08000000, LENGTH = 1024K</code>
+        <br>
+        <code>SRAM(rwx):ORIGIN=0x20000000, LENGTH = 128K</code>
+        <br>
+        <code>}</code>
       </li>
     </ul>
   </li>
