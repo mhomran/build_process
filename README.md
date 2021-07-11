@@ -6,6 +6,7 @@
 It's a compiler, linker and assembler.
 
 #### common flags:
+<a href="https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html">GNU reference</a>
 <ul>
   <li>
     <code>-o</code> to specifiy the name of the output file. If it's not specified, the default name is a.out
@@ -29,7 +30,10 @@ It's a compiler, linker and assembler.
     <code>-std=</code>determine the C standard.
   </li>
   <li>
-    <code>-O</code>Determine the optimization level.
+    <code>-O</code> determine the optimization level.
+  </li>
+  <li>
+    <code>-Wall</code> enable all warnings detction.
   </li>
 </ul>
 
@@ -207,3 +211,123 @@ The keyword ```__attribute__``` allows you to specify special properties of vari
 
 ### 2-.data, .bss initialization
 To get the .data section from flash, you should know the boundaries of this section in flash. The linker script passes this boundaries to the startup file.
+
+
+## Linker script
+- Linker script is a text file which explains how different sections of the object files should be merged to create an output file.
+- Linker and locator combination assigns unique absolute addresses to different sections of the output file by referring to address information mentioned in the linker script.
+- Linker script also includes the code and data memory address and size information.
+- Linker script are written using <strong>GNU linker command language</strong>
+- GNU linker script has the file extension of .ld
+- You must supply linker script at the linking phase to the linker using <code>-T</code> option
+
+### Important linker script commands
+<ul>
+  <li>
+    <code>ENTRY</code> 
+    <br>
+    <ul>
+      <li>
+        This command is used to set the <strong>Entry point address</strong> information in the header of the final ELF file generated.
+      </li>
+      <li>
+        In our case, <strong>Reset_Handler</strong> is the entry point into the application. The first piece of code that executes right after the processor reset.
+      </li>
+      <li>
+        The debugger uses this information to locate the first function to execute.
+      </li>
+      <li>
+        Not a mandatory command to use, but required when you debug the ELF file using the debugger (GDB).
+      </li>
+      <li>
+        Syntax <code>ENTRY(_symbol_name_)</code> <br>
+        e.g. <code>ENTRY(Reset_Handler)</code>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <code>MEMORY</code> 
+    <ul>
+      <li>
+        This command allows you to describe the different memories present in the target and their start address and size information.
+      </li>
+      <li>
+        The linker uses information mentioned in this command to assign addresses to merged sections.
+      </li>
+      <li>
+        The information is given under this command also helps the linker to calculate total code and data memory consumed so far and throw an error message if data, code, heap or stack areas can't fit into available size.
+      </li>
+      <li>
+        By using memory command, you can fine-tune various memories available in your target and allow different sections to occupy different memory areas.
+      </li>
+      <li>
+        Typically one linker script has one memory command.
+      </li>
+      <li>
+        syntax <br>
+        <code style="white-space: pre;">
+MEMORY 
+{
+  name(attr):ORIGIN=origin, LENGTH = len
+}
+        </code>
+        <ul>
+          <li>
+            name: defines the name of the memory region which will be later referenced by other parts of the linker script. A name has its own optional attribute list <code>attr</code>
+          </li>
+          <li>
+            ORIGIN: defines the origin address of the memory region.
+          </li>
+          <li>
+            LENGTH: defines the length information.
+          </li>
+          <li>
+            attr: defines the attribute list of the memory region. Valid attribute lists must be made up of the characters "ALIRWX" or "alirwx" that match section attributes.
+            <ul>
+              <li>
+                R: Read-only sections.
+              </li>
+              <li>
+                W: Read and write sections.
+              </li>
+              <li>
+                X: Sections containing executable code.
+              </li>
+              <li>
+                A: Allocated sections.
+              </li>
+              <li>
+                I/L: Initialized sections.
+              </li>
+              <li>
+                !: Invert the sense of any of the following attributes.
+              </li>
+            </ul>
+          </li>
+        </ul> 
+      </li>
+      <li>
+        example: <br>
+        <code style="white-space: pre">
+          MEMORY 
+          {
+            FLASH(rx):ORIGIN=0x08000000,LENGTH=1024K
+            SRAM(rwx):ORIGIN=0x20000000,LENGTH=128K
+          }
+        </code>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <code>SECTIONS</code> 
+  </li>
+  <li>
+    <code>KEEP</code> 
+  </li>
+  <li>
+    <code>ALIGN</code> 
+  </li>
+  <li>
+    <code>AT></code> 
+  </li>
+</ul>
