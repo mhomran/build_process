@@ -325,6 +325,46 @@ To get the .data section from flash, you should know the boundaries of this sect
   </li>
   <li>
     <code>SECTIONS</code> 
+    <ul>
+      <li>
+        SECTIONS command is used to create different output sections in the final ELF executable generated.
+      </li>
+      <li>
+        Important command by which you can instruct the linker how to merge the input sections to yield an output section.
+      </li>
+      <li>
+        This command also controls the order in which different output sections appear in the ELF file generated.
+      </li>
+      <li>
+        By using this command, you also mention the placement of a section in a memory region. For example, you instruct the linker to place the .text section in the FLASH memory region, which is described by the MEMORY command.
+      </li>
+      <li>
+        syntax<br>
+        <code>SECTIONS</code><br>
+        <code>{</code><br>
+        <code>.text :</code><br>
+        <code>{</code><br>
+        <code>//body</code><br>
+        <code>//This section should include .text, .isr_vector, and .rodata section of all input files</code><br>
+        <code>*(.isr_vector)</code><br>
+        <code>*(.text)</code><br>
+        <code>*(.rodata)</code><br>
+        <code>_etext = .;</code><br>
+        <code>}</code><br>
+        <code>}> VMA AT> LMA</code><br>
+        <ul>
+          <li>
+            .text: name of the section
+          </li>
+          <li>
+            > VMA AT> LMA: gives information to the linker where this section is in the memory. VMA->virtual memory address, LMA->locatable memory address. e.g. for .text section VMA and LMA are equal to FLASH. In this case, you can just mention the VMA and the linker infers that the LMA is similiar (> FLASH). For SRAM, it's locatable area is in FLASH, but the absolute address (virtual address) is in SRAM (> SRAM AT> FLASH).
+          </li>
+          <li>
+            *(.text): merge .text section of all input files, * is a wildcard.
+          </li>
+        </ul>
+      </li>
+    </ul>
   </li>
   <li>
     <code>KEEP</code> 
@@ -336,3 +376,21 @@ To get the .data section from flash, you should know the boundaries of this sect
     <code>AT></code> 
   </li>
 </ul>
+
+### Linker script symbol 
+- A symbol is the same of an address.
+- A symbol declaration is not equivalent to a variable declaration what you do in you 'C' application.
+<img src="imgs/linker_script_symbol.png">
+
+example: <br>
+__max_stack_size = 0x200; 
+
+### Location counter (.)
+- This is a special linker symbol denoated by a dot '.'
+- This symbol is called "location counter"since linker automatically updates this symbol with location (address) information.
+- You can use this symbol inside the linker script to track and define boundaries of various sections.
+- You can also set location counter to any specific value while writing linker script.
+- Location counter should appear only inside the SECTIONS command.
+- The location counter is incremented by the size of the output section.
+- Location counter always tracks VMA of the section in which it's being used.
+
