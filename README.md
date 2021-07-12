@@ -61,8 +61,6 @@ It's an assembler.
 It's a format converter to change from executable format to another executable format.
 ### arm-none-eabi-objdump
 To dump an object file e.g. main.o
-### arm-none-eabi-nm
-To see all the symbols of ELF file.
 #### common flags:
 <ul>
   <li>
@@ -78,10 +76,9 @@ To see all the symbols of ELF file.
     <code>-s</code>(full-content)display the full contents of all sections requested. 
   </li>
 </ul>
-
 ### arm-none-eabi-readelf
 ### arm-none-eabi-nm
-
+To see all the symbols of ELF file.
 ## Makefile
 ### rule
 A rule appears in the makefile and says when and how to remake certain files, called the rule’s <i>targets</i> (most often only one per rule). It lists the other files that are the <i>prerequisites</i> of the target, and the <i>recipe</i> to use to create or update the target.
