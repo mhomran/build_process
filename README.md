@@ -390,7 +390,7 @@ To get the .data section from flash, you should know the boundaries of this sect
   </li>
   <li>
     <code>ALIGN</code> 
-    To align a speicifc variable on a specific boundary. <code>. = ALIGN(4)p;</code> Align the location counter on a word boundary.
+    To align a specific variable on a specific boundary. <code>. = ALIGN(4)p;</code> Align the location counter on a word boundary.
   </li>
   <li>
     <code>AT></code>
@@ -431,8 +431,7 @@ example:
 *(.text)
 0x08000762 Reset_Handler
 *(.rodata) 
-*fill* 
-0x0800076e 2
+*fill* 0x0800076e 2
 0x08000770 0x9 main.o
 ```
 
