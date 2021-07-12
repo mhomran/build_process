@@ -389,13 +389,12 @@ To get the .data section from flash, you should know the boundaries of this sect
     </ul>
   </li>
   <li>
-    <code>KEEP</code> 
-  </li>
-  <li>
     <code>ALIGN</code> 
+    To align a speicifc variable on a specific boundary. <code>. = ALIGN(4)p;</code> Align the location counter on a word boundary.
   </li>
   <li>
-    <code>AT></code> 
+    <code>AT></code>
+    To specify the LMA (locatable memory address).
   </li>
 </ul>
 
