@@ -5,7 +5,7 @@
 ### arm-none-eabi-gcc
 It's a compiler, linker and assembler.
 
-#### common flags:
+#### common compiler flags:
 <a href="https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html">GNU reference</a>
 <ul>
   <li>
@@ -31,9 +31,25 @@ It's a compiler, linker and assembler.
   </li>
   <li>
     <code>-O</code> determine the optimization level.
-  </li>
+  </li>  
+  <li>
+    <code>-Wl</code> to specify a flag for the linker. syntax: <code>-Wl,-Map=final.map</code>
+  </li>  
+</ul>
+
+#### common linker flags:
+<ul>
   <li>
     <code>-Wall</code> enable all warnings detction.
+  </li>
+  <li>
+    <code>-T</code> to specify the linker script.
+  </li>
+  <li>
+    <code>-nostdlib</code> to not use standard library.
+  </li>
+  <li>
+    <code>-Map=final.map</code> to generate a map file.
   </li>
 </ul>
 
@@ -45,6 +61,8 @@ It's an assembler.
 It's a format converter to change from executable format to another executable format.
 ### arm-none-eabi-objdump
 To dump an object file e.g. main.o
+### arm-none-eabi-nm
+To see all the symbols of ELF file.
 #### common flags:
 <ul>
   <li>
@@ -147,9 +165,11 @@ main.o doesn't include any <strong>absolute addresses</strong> for data and code
 ##### .text
 It holds the code or the instructions of the program.
 ##### .data
-It holds the initialized data.
+It holds the initialized global variables.
 ##### .bss
-It holds the uninitialized data.
+It holds the static uninitialized global variables.
+##### .common 
+It holds the non-static uninitialized global variables.
 ##### .rodata
 It holds the read-only data of the program.
 #### User defined sections
@@ -163,6 +183,8 @@ You can add your own sections.
 - Startup code takes care of vector table placement in code memory as required by the ARM cortex Mx processor.
 - Startup code may also take care of stack reinitialization. 
 - Startup code is responsible of .data, .bss section initialization in main memory.
+
+<img src="imgs/flash_to_sram.png">
 
 ### startup file components
 - A vector table for your microcontroller. Vector tables are MCU specific.
@@ -270,7 +292,7 @@ To get the .data section from flash, you should know the boundaries of this sect
         <br>
         <code>{</code>
         <br>
-        <code>name(attr):ORIGIN=origin, LENGTH = len</code>
+        <code>name(attr):ORIGIN =origin, LENGTH =len</code>
         <br>
         <code>}</code>
         <ul>
@@ -315,9 +337,9 @@ To get the .data section from flash, you should know the boundaries of this sect
         <br>
         <code>{</code>
         <br>
-        <code>FLASH(rx):ORIGIN=0x08000000, LENGTH = 1024K</code>
+        <code>FLASH(rx):ORIGIN =0x08000000, LENGTH =1024K</code>
         <br>
-        <code>SRAM(rwx):ORIGIN=0x20000000, LENGTH = 128K</code>
+        <code>SRAM(rwx):ORIGIN =0x20000000, LENGTH =128K</code>
         <br>
         <code>}</code>
       </li>
@@ -385,6 +407,12 @@ To get the .data section from flash, you should know the boundaries of this sect
 example: <br>
 __max_stack_size = 0x200; 
 
+- To import the symbol from the startup file <br>
+<code>extern uint32_t __max_stack_size;</code><br>
+<code>uint32_t temp =  &__max_stack_size;</code><br>
+You should access the symbol with <code>&</code> because it's an address and not a value.
+- If you want to see all the symbols of the ELF file, use <code>arm-none-eabi-nm</code> tool.
+
 ### Location counter (.)
 - This is a special linker symbol denoated by a dot '.'
 - This symbol is called "location counter"since linker automatically updates this symbol with location (address) information.
@@ -394,3 +422,21 @@ __max_stack_size = 0x200;
 - The location counter is incremented by the size of the output section.
 - Location counter always tracks VMA of the section in which it's being used.
 
+### map file
+- It shows the memory map and where all the sections are placed.
+- To know the addresses of the functions.
+- The linker will fill bytes to align only the <strong>internal parts</strong> of a section. 
+
+example:
+```
+*(.text)
+0x08000762 Reset_Handler
+*(.rodata) 
+*fill* 
+0x0800076e 2
+0x08000770 0x9 main.o
+```
+
+- But it will not align the beginning or the end of the section. So, you need to use <code>ALIGN</code>. <br>
+e.g. <code> . = ALIGN(4);</code> which means to align the location counter on the next 4 bytes (word) boundary.
+- A rule of thump: before ending any section, make sure the location counter is aligned.
