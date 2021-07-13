@@ -438,3 +438,48 @@ example:
 - But it will not align the beginning or the end of the section. So, you need to use <code>ALIGN</code>. <br>
 e.g. <code> . = ALIGN(4);</code> which means to align the location counter on the next 4 bytes (word) boundary.
 - A rule of thump: before ending any section, make sure the location counter is aligned.
+
+## Downloading and debugging executable
+<img src="imgs/download_debug.png">
+<img src="imgs/programmer.png">
+
+### OpenOCD
+- Open On-Chip Debugger (OpenOCD) aims to provide debugging, in-system programming, and boundary-scan testing for embedded target devices.
+- It's free and opensource host application allows you to program, debug and analyze your application using GDB.
+- It supports various target boards based on different processor architecture.
+- OpenOCD currently supports many types of debug adapters: USB-based, pararllel port-based, and other standalone boxes that run OpenOCD internally.
+- GDB Debug: it allows many ARM architectures to be debugged via the GDB protocol.
+- Flash Programming
+
+### programming adapters
+- programming adapters are used to get access to the debug interface of the target with native protcol signaling such as SWD or JTAG since HOST doesn't support such interfaces.
+- It does protocol conversion. For example, commands and messages coming from host application in the form of USB packets will be converted to quivalent debug interface signaling (SWD or JTAG) and vice versa.
+- Mainly debug adapter helps you to download and debug the code.
+- Some advanced debug adapters will also help you to capture trace events such as on the fly instruction trace and profiling information.
+
+<figure>
+  <img src="imgs/programming_external.png">
+  <figcaption>prgramming with external ST-LINK programmer</figcaption>
+</figure>
+<figure>
+  <img src="imgs/programming_internal.png">
+  <figcaption>prgramming with internal/embedded ST-LINK programmer</figcaption>
+</figure>
+
+### steps to download the code using OpenOCD
+1. Download and install OpenOCD
+    1. Download the binaries.
+    1. Put the openocd executable in the path.
+1. install Telnet client (for windows you can use PuTTY software). If you can't use Telnet application you can use also use "GDB client".
+1. Run OpenOCD with the board configuration file.
+1. connect to the OpenOCD via Telnet Client or GDB client.
+1. Connect to the OpenOCD via Telnet Client or GDB client.
+1. Issue commands over Telnet or GDB Client to OpenOCD to download and debug the code.
+
+### OpenOCD configuration file
+add a recipe for the load in the Makefile
+```
+load:
+        openocd -f board/stm32f4discovery.cfg
+```
+You can can get the correct configuration file from scripts folder in the openocd folder according to your board.
