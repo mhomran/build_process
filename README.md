@@ -34,14 +34,20 @@ It's a compiler, linker and assembler.
   </li>  
   <li>
     <code>-Wl</code> to specify a flag for the linker. syntax: <code>-Wl,-Map=final.map</code>
-  </li>  
-</ul>
-
-#### common linker flags:
-<ul>
+  </li> 
+  <li>
+  <code>-g</code> Produce debugging information in the operating system’s native format (stabs, COFF, XCOFF, or DWARF). GDB can work with this debugging information. 
+  </li> 
   <li>
     <code>-Wall</code> enable all warnings detction.
   </li>
+</ul>
+
+
+### arm-none-eabi-ld
+It's a linker.
+#### common linker flags:
+<ul>
   <li>
     <code>-T</code> to specify the linker script.
   </li>
@@ -53,8 +59,6 @@ It's a compiler, linker and assembler.
   </li>
 </ul>
 
-### arm-none-eabi-ld
-It's a linker.
 ### arm-none-eabi-as
 It's an assembler.
 ### arm-none-eabi-objcopy
@@ -234,6 +238,15 @@ The keyword ```__attribute__``` allows you to specify special properties of vari
 ### 2-.data, .bss initialization
 To get the .data section from flash, you should know the boundaries of this section in flash. The linker script passes this boundaries to the startup file.
 
+### 3-initialize 'C' std library
+You should declare and call a standard library function:
+```C
+__libc_init_array();
+```
+### 4-declare and call the main function
+```C
+main();
+```
 
 ## Linker script
 - Linker script is a text file which explains how different sections of the object files should be merged to create an output file.
@@ -526,6 +539,11 @@ monitor bp address length
 monitor bp 0x08000000 2 
 ```
 
+#### to shutdown the connection
+```
+monitor shutdown
+```
+
 #### Set a hardware breakpoint
 ```
 monitor bp 0x08000000 2 hw
@@ -540,3 +558,72 @@ rbp all
 ```
 ### reference
 http://openocd.org/doc/html/General-Commands.html
+
+## 'C' standard library newlib & newlib-nano
+
+### Newlib
+- Newlib is a 'C' standard library implmentation intended for use on embedded systems, and it's introduced by Cygnus Solutions (now Red Hat).
+- "Newlib" is written as Glibc(GNU libc) replacement for embedded systems. It can be used with no OS ("bare metal") or with a lightweight RTOS.
+- Newlib ships with GNU ARM toolchain installation as the default C standard library.
+- GNU libc (glibc) includes ISO C, POSIX, SystemV, and XPG interfaces. uClibs provides ISO C, POSIX, and SystemV, while Newlib provides only ISO C.
+- Location in the tool chain: GNU Arm Embedded Toolchain\10 2020-q4-major\arm-none-eabi\lib 
+- name: libc.a
+- Semihosting library that is used for console IO operations like printf: librdimon.a
+- there're .specs files used to link to this library
+### Newlib-nano
+- Due to the increased feature set in newlib, it has become too bloated to use on the systems where the amound of memory is very much limited.
+- To provide a C library with a minimal memory footprint, suited for use with micro-controlled, ARM introduced newlib-nano based on newlib.
+- Location in the tool chain: GNU Arm Embedded Toolchain\10 2020-q4-major\arm-none-eabi\lib 
+- name: libc_nano.a
+- Semihosting library that is used for console IO operations like printf: librdimon_nano.a
+- there's .specs file: <code>nano.specs</code> used to link to this library. For the semihosting <code>rdimon.specs</code>
+
+### Low level system calls
+- The idea of Newlib is to implement the hardware-independent parts of the standard C library and rely on a few low-level system calls that must be implemented with the target hardware in mind.
+- When you're using newlib, you must implement the system calls appropriately to support devices, file-systems, and memory management.
+
+<img src="imgs/syscall.png">
+
+- To link to the library, add to the linker flags:
+```
+--specs=nano.specs
+```
+- <code>-nostdlib</code> should be removed
+- You should also include the architecture and the thump state in the linker.
+```
+-mcpu=&(MACH) -mthump
+```
+- Linking ot the standard library introduces new sections for example <code>.text.memset</code>. So, they can be merged in the the .text section with 
+```
+*(.text.*)
+```
+- If there're sections between the .text and the .data in FLASH, you shouldn't use the end of the .text as the start of the .data section in FLASH. Instead, you should use linker command in the .section which is 
+```
+_la_data = LOADADDR(.data);
+```
+- You should specify the floating-point ABI to use in the compiler and linker flags. 'soft', 'softfp' or 'hard'. 'soft' totally software operations. 'hard' all operation is made with the FPU. 'softfp' some software and some with FPU.
+```
+-mfloat-abi=soft
+or
+-mfloat-abi=hard
+```
+
+## Semi-hosting
+Semihosting is a mechanism that enables code running on an ARM target to communicate and use the Input/Output facilities on a host computer that is running a debugger.
+
+- to use it, you should use this flag in the linker:
+```
+-specs=rdimon.specs
+```
+Declare and call this function in the main function:
+```
+initialise_monitor_handles();
+```
+- You don't need to implement any system calls any more
+- After connecting to OpenOCD, to enable the semihosting, you should run
+```
+monitor arm semihosting enable
+```
+
+<img src="imgs/semihosting.png">
+The debug agent running on HOST catches that command and argument.
