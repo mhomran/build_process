@@ -1,5 +1,11 @@
-## build process
+# build process
 <img src="imgs/build_process.png">
+
+## Acknowledgment
+
+<a href="https://www.youtube.com/channel/UCa1REBV9hyrzGp2mjJCagBg">Fastbit Embedded Brain Academy </a> YouTube channel.
+
+<a href="https://youtube.com/playlist?list=PLERTijJOmYrDiiWd10iRHY0VRHdJwUH4g">Bare metal embedded Playlist</a>
 
 ## Cross tool chain important binaries
 ### arm-none-eabi-gcc
