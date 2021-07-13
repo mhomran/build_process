@@ -477,9 +477,66 @@ e.g. <code> . = ALIGN(4);</code> which means to align the location counter on th
 1. Issue commands over Telnet or GDB Client to OpenOCD to download and debug the code.
 
 ### OpenOCD configuration file
-add a recipe for the load in the Makefile
+Add a recipe for the load in the Makefile, it will start OpenOCD listening.
 ```
 load:
         openocd -f board/stm32f4discovery.cfg
 ```
 You can can get the correct configuration file from scripts folder in the openocd folder according to your board.
+
+### connect to OpenOCD using GDB client
+run the GDB client
+```
+arm-none-eabi-gdb.exe 
+```
+Once it's working, connect to OpenOCD with
+```
+target remote localhost:3333
+```
+initialize
+```
+monitor reset init
+```
+<code>monitor</code> is used to differentiate between GCD and OpenOCD command. So, it must be used before every OpenOCD command.
+
+#### Flash
+```
+monitor flash write_image erase final.elf
+```
+#### Reset then halt the execution of the code.
+```
+monitor reset halt
+```
+#### Run the program
+```
+monitor resume
+```
+#### Stop the execution
+```
+monitor halt
+```
+#### Reset the board
+```
+monitor reset
+```
+#### Set a software breakpoint
+<code>bp [address len [hw]]</code> sets a breakpoint on code execution starting at address for length bytes. I didn't get what's the length...
+```
+monitor bp address length 
+monitor bp 0x08000000 2 
+```
+
+#### Set a hardware breakpoint
+```
+monitor bp 0x08000000 2 hw
+```
+
+#### Remove a breakpoint
+Command: rbp all | address
+Remove the breakpoint at address or all breakpoints.
+```
+rbp 0x08000000
+rbp all
+```
+### reference
+http://openocd.org/doc/html/General-Commands.html
