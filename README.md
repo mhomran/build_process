@@ -412,6 +412,10 @@ main();
     To align a specific variable on a specific boundary. <code>. = ALIGN(4)p;</code> Align the location counter on a word boundary.
   </li>
   <li>
+    <code>KEEP</code> 
+    Force the linker to keep some specific sections even if they're not referenced. For example, it's used with <code>.isr_vector</code> section because it should be included in all cases.
+  </li>
+  <li>
     <code>AT></code>
     To specify the LMA (locatable memory address).
   </li>
