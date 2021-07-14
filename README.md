@@ -49,7 +49,8 @@ It's a compiler, linker and assembler.
   </li>
   <li>
     <code>-MD</code>
-    Output a rule suitable for make describing the dependencies of the main source file. The preprocessor outputs one make rule containing the object file name for that source file, a colon, and the names of all the included files, including those coming from -include or -imacros command-line options. Give the dependency file the name of the output with extension .d (this is the purpose of D in MD)
+    Output a rule suitable for make describing the dependencies of the main source file. The preprocessor outputs one make rule containing the object file name for that source file, a colon, and the names of all the included files, including those coming from -include or -imacros command-line options. Give the dependency file the name of the output with extension .d (this is the purpose of D in MD).
+    <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Prerequisites.html">Reference</a>
   </li>
   <li>
     <code>-MMD</code>
