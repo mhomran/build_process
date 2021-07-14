@@ -42,10 +42,18 @@ It's a compiler, linker and assembler.
     <code>-Wl</code> to specify a flag for the linker. syntax: <code>-Wl,-Map=final.map</code>
   </li> 
   <li>
-  <code>-g</code> Produce debugging information in the operating system’s native format (stabs, COFF, XCOFF, or DWARF). GDB can work with this debugging information. 
+    <code>-g</code> Produce debugging information in the operating system’s native format (stabs, COFF, XCOFF, or DWARF). GDB can work with this debugging information. 
   </li> 
   <li>
     <code>-Wall</code> enable all warnings detction.
+  </li>
+  <li>
+    <code>-MD</code>
+    Output a rule suitable for make describing the dependencies of the main source file. The preprocessor outputs one make rule containing the object file name for that source file, a colon, and the names of all the included files, including those coming from -include or -imacros command-line options. Give the dependency file the name of the output with extension .d (this is the purpose of D in MD)
+  </li>
+  <li>
+    <code>-MMD</code>
+    Like -MD except mention only user header files, not system header files. 
   </li>
 </ul>
 
