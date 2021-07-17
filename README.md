@@ -407,7 +407,8 @@ main();
             .text: name of the section
           </li>
           <li>
-            > VMA AT> LMA: gives information to the linker where this section is in the memory. VMA->virtual memory address, LMA->locatable memory address. e.g. for .text section VMA and LMA are equal to FLASH. In this case, you can just mention the VMA and the linker infers that the LMA is similiar (> FLASH). For SRAM, it's locatable area is in FLASH, but the absolute address (virtual address) is in SRAM (> SRAM AT> FLASH).
+            > VMA AT> LMA: gives information to the linker where this section is in the memory. VMA->virtual memory address, LMA->locatable memory address. e.g. for .text section VMA and LMA are equal to FLASH. For SRAM, it's locatable area is in FLASH, but the absolute address (virtual address) is in SRAM (> SRAM AT> FLASH).
+            If LMA is not specified, the linker uses a heuristic to determine it, so it's better to determine it e.g. the linker of stm32 doesn't include it in .bss section and that makes .bss being loaded in flash when it's not needed (lost flash memory space).
           </li>
           <li>
             *(.text): merge .text section of all input files, * is a wildcard.
